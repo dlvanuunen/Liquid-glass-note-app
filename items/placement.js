@@ -1,0 +1,6 @@
+export const defaultPlacement = {
+  x: 500,
+  y: 500,
+  width: 200,
+  height: 200,
+};

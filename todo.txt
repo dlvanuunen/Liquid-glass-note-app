@@ -1,0 +1,27 @@
+Next up:
+
+adding canvas/shader
+
+
+
+Basic architecture:
+
+src/
+│
+├── main.js
+│
+├── store/
+│   └── store.js
+│
+├── items/
+│   ├── note.js
+│   └── noteView.js
+│
+├── canvas/
+│   └── canvas.js
+│
+├── interaction/
+│   └── drag.js
+│
+└── styles/
+    └── main.css
