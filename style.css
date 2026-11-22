@@ -10,7 +10,7 @@
         background: linear-gradient(135deg, #ff6a3d, #7a3cff);
     }
 
-
+/* 
     #shader-canvas {
         position: relative;
         position: absolute;
@@ -19,7 +19,20 @@
           width: 100%;
     height: 100%;
         pointer-events: none
-    }
+    } */
+
+    #three-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+
+
 
     .note {
         position: absolute;

@@ -3,8 +3,10 @@ import { createView } from "./graphics/createView.js";
 import { makeDraggable } from "./physics/drag.js";
 import { defaultPlacement } from "./items/placement.js";
 import { store, addItem, addPlacement, loadStore, saveStore } from "./store.js";
-import { initWebGL, render } from "./graphics/render.js";
+import { render } from "./graphics/render.js";
 
+import * as THREE from
+  "https://cdn.jsdelivr.net/npm/three/build/three.module.js";
 
 
 const workspace = document.getElementById("workspace-content");
@@ -12,7 +14,6 @@ const workspace = document.getElementById("workspace-content");
 
 loadStore();
 render();
-initWebGL();
 
 //
 

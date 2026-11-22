@@ -5,8 +5,19 @@ import { createView } from "./createView.js";
 // import shaders
 import { vertexShaderSource, fragmentShaderSource } from "./shaders.js";
 
+
+import * as THREE from
+  "https://cdn.jsdelivr.net/npm/three/build/three.module.js";
+
+
+
 const workspaceContent = document.getElementById("workspace-content");
 const workspace = document.getElementById("workspace");
+const threeCanvas = document.getElementById("three-canvas");
+
+
+const width = workspace.clientWidth
+const height=workspace.clientHeight
 
 //
 // Main render function
@@ -37,123 +48,81 @@ export function render() {
   return;
 }
 
-//
-// WebGL Boilerplate
-//
 
-export function initWebGL() {
-  console.log("WebGL initialization started");
-  const shaderCanvas = document.getElementById("shader-canvas");
-  const gl = shaderCanvas.getContext("webgl", {
-    alpha: true,
-    antialias: true,
-  });
+const scene = new THREE.Scene()
+const camera = new THREE.OrthographicCamera(
+  -width / 2,
+  width / 2,
+  height / 2,
+  -height / 2,
+  0.1,
+  1000
+);
 
-  if (!gl) {
-    console.error("WebGL is not supported");
-    return null;
-  }
+camera.position.z = 10;
 
-  console.log(shaderCanvas);
-  console.log(gl);
+const renderer = new THREE.WebGLRenderer({
+canvas: threeCanvas,
+alpha: true, 
+antialias: true
 
-  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+})
 
-  const fragmentShader = createShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    fragmentShaderSource,
+function resizeRenderer() {
+  const width = workspace.clientWidth;
+  const height = workspace.clientHeight;
+
+  renderer.setSize(width, height);
+
+  camera.left = -width / 2;
+  camera.right = width / 2;
+  camera.top = height / 2;
+  camera.bottom = -height / 2;
+  camera.updateProjectionMatrix();
+  renderer.render(scene, camera);
+}
+
+
+
+const geometry = new THREE.BoxGeometry(
+  100, // width
+  100, // height
+  10   // depth
+);
+const material = new THREE.MeshBasicMaterial({
+  color: 0x4488ff
+});
+
+const testObject = new THREE.Mesh(geometry, material);
+
+scene.add(testObject);
+
+resizeRenderer();
+window.addEventListener("resize", resizeRenderer);
+
+
+
+// todo
+function createNoteMesh(placement) {
+
+  // Create geometry using placement.width and placement.height
+  const geometry = new THREE.BoxGeometry(
+    // TODO
   );
 
-  if (!vertexShader || !fragmentShader) return null;
-
-  const program = createProgram(gl, vertexShader, fragmentShader);
-  console.log("Shader program:", program);
-
-  if (!program) return null;
-
-  gl.useProgram(program);
-
-  const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]);
-
-  const buffer = gl.createBuffer();
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-  const positionLocation = gl.getAttribLocation(program, "a_position");
-
-  gl.enableVertexAttribArray(positionLocation);
-  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-  function resizeCanvas() {
-    const { width, height } = workspace.getBoundingClientRect();
-
-    shaderCanvas.width = width * window.devicePixelRatio;
-    shaderCanvas.height = height * window.devicePixelRatio;
-
-    gl.viewport(0, 0, shaderCanvas.width, shaderCanvas.height);
-  }
-
-  function clear() {
-    gl.clearColor(0, 0, 0, 0.5);
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-    gl.useProgram(program);
-
-    gl.uniform2f(
-      gl.getUniformLocation(program, "u_resolution"),
-      shaderCanvas.width,
-      shaderCanvas.height,
-    );
-
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
-    console.log(gl.getError());
-  }
-
-  const resizeObserver = new ResizeObserver(() => {
-    resizeCanvas();
-    clear();
+  // Create a material
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x4488ff
   });
 
-  resizeObserver.observe(workspace);
-  resizeCanvas();
-  clear();
+  // Combine geometry and material
+  const mesh = new THREE.Mesh(geometry, material);
 
-  return { gl, shaderCanvas, clear, resizeCanvas };
-}
+  // TODO: Set mesh position using placement.x and placement.y
+  // Remember that the camera is centred around (0, 0).
 
-//
-// WebGL / Shader Helper fuctions
-//
+  // Add mesh to scene
+  scene.add(mesh);
 
-function createShader(gl, type, source) {
-  const shader = gl.createShader(type);
-
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    console.error(gl.getShaderInfoLog(shader));
-    gl.deleteShader(shader);
-    return null;
-  }
-
-  return shader;
-}
-
-function createProgram(gl, vertexShader, fragmentShader) {
-  const program = gl.createProgram();
-
-  gl.attachShader(program, vertexShader);
-  gl.attachShader(program, fragmentShader);
-  gl.linkProgram(program);
-
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(program));
-    gl.deleteProgram(program);
-    return null;
-  }
-
-  return program;
+  return mesh;
 }
