@@ -1,55 +1,56 @@
-    html,
-    body {
-        margin: 0;
-        height: 100%;
-    }
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+#workspace {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ff6a3d, #7a3cff);
+}
 
-    #workspace {
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #ff6a3d, #7a3cff);
-    }
-
-/* 
-    #shader-canvas {
-        position: relative;
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-          width: 100%;
-    height: 100%;
-        pointer-events: none
-    } */
-
-    #three-canvas {
+#three-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
+#add-note-button,
+#clear-all-button {
+  position: absolute;
+  top: 16px;
+  z-index: 10;
+}
 
+#add-note-button {
+  left: 16px;
+}
+#clear-all-button {
+  left: 140px;
+}
 
+.note {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 24px;
+  color: white;
+  /* background: rgba(255, 255, 255, 0.25); */
+  /* border: 1px solid rgba(255, 255, 255, 0.5); */
+}
 
-
-    .note {
-        position: absolute;
-        left: 0;
-        top: 0;
-        box-sizing: border-box;
-        padding: 16px;
-        border-radius: 24px;
-        color: white;
-        background: rgba(255, 255, 255, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-
-    .note-title {
-        cursor: grab;
-        user-select: none;
-        touch-action: none;
-        font-weight: 600;
-        padding-bottom: 8px;
-    }
+.note-title {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
